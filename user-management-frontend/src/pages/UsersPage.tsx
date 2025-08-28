@@ -43,7 +43,7 @@ export default function UsersPage() {
   return (
     <Box p={3}>
       <Typography variant="h5">User Management</Typography>
-      <Box mt={2} sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+      <Box mt={2} sx={{ display: "flex", gap: 2, alignItems: "center", justifyContent: "flex-end" }}>
         <TextField
           size="small"
           placeholder="Search users..."
@@ -58,18 +58,25 @@ export default function UsersPage() {
       </Box>
 
       {loading ? <Box mt={3}><CircularProgress /></Box> : (
-        <UserTable
-          users={users.filter((u) => {
+        (() => {
+          const filtered = users.filter((u) => {
             const q = query.trim().toLowerCase();
             if (!q) return true;
             return [u.name, u.email, u.phone, u.department, u.gender, u.role]
               .join(" ")
               .toLowerCase()
               .includes(q);
-          })}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
-        />
+          });
+          return (
+            <UserTable
+              users={filtered}
+              visibleCount={filtered.length}
+              totalCount={users.length}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+            />
+          );
+        })()
       )}
 
       <UserFormDrawer

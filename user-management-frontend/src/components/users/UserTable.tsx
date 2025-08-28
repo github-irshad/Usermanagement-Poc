@@ -4,6 +4,8 @@ import type { User } from "../../types/user";
 import {
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Typography, Box
 } from "@mui/material";
+import RoleChip from "../common/RoleChip";
+import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
@@ -11,9 +13,11 @@ interface Props {
   users: User[];
   onEdit: (u: User) => void;
   onDelete: (u: User) => void;
+  visibleCount?: number;
+  totalCount?: number;
 }
 
-export default function UserTable({ users, onEdit, onDelete }: Props) {
+export default function UserTable({ users, onEdit, onDelete, visibleCount, totalCount }: Props) {
   if (!users || users.length === 0) {
     return <Box p={3}><Typography>No users found</Typography></Box>;
   }
@@ -38,7 +42,7 @@ export default function UserTable({ users, onEdit, onDelete }: Props) {
             <TableRow key={u.id}>
               <TableCell>{u.name}</TableCell>
               <TableCell>{u.email}</TableCell>
-              <TableCell>{u.role}</TableCell>
+              <TableCell><RoleChip role={u.role} /></TableCell>
               <TableCell>{u.gender}</TableCell>
               <TableCell>{u.dob}</TableCell>
               <TableCell>{u.phone}</TableCell>
@@ -51,6 +55,12 @@ export default function UserTable({ users, onEdit, onDelete }: Props) {
           ))}
         </TableBody>
       </Table>
+      {(visibleCount !== undefined && totalCount !== undefined) && (
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1, p: 2 }}>
+          <PersonOutlineIcon fontSize="small" />
+          <Typography variant="body2">Showing {visibleCount} of {totalCount} users.</Typography>
+        </Box>
+      )}
     </TableContainer>
   );
 }
