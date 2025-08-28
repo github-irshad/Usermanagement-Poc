@@ -1,6 +1,7 @@
 // src/pages/UsersPage.tsx
 import React, { useState } from "react";
-import { Box, Button, Typography, CircularProgress, TextField, InputAdornment } from "@mui/material";
+import { Box, Button, Typography, CircularProgress, TextField, InputAdornment, Snackbar } from "@mui/material";
+import MuiAlert from "@mui/material/Alert";
 import SearchIcon from "@mui/icons-material/Search";
 import UserTable from "../components/users/UserTable";
 import UserFormDrawer from "../components/users/UserFormDrawer";
@@ -15,14 +16,20 @@ export default function UsersPage() {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [toDelete, setToDelete] = useState<User | null>(null);
   const [query, setQuery] = useState("");
+  const [toast, setToast] = useState<{ open: boolean; message: string; severity: "success" | "error" }>({ open: false, message: "", severity: "success" });
+
+  const showToast = (message: string, severity: "success" | "error" = "success") =>
+    setToast({ open: true, message, severity });
 
   const onAddClick = () => { setEditing(null); setOpenForm(true); };
 
   const handleSave = async (payload: Omit<User, "id">) => {
     if (editing) {
       await update(editing.id, payload);
+      showToast("User updated");
     } else {
       await add(payload);
+      showToast("User added");
     }
     setOpenForm(false);
     setEditing(null);
@@ -37,6 +44,7 @@ export default function UsersPage() {
       await remove(toDelete.id);
       setConfirmOpen(false);
       setToDelete(null);
+      showToast("User deleted");
     }
   };
 
@@ -93,6 +101,17 @@ export default function UsersPage() {
         onCancel={() => setConfirmOpen(false)}
         onConfirm={confirmDelete}
       />
+
+      <Snackbar
+        open={toast.open}
+        autoHideDuration={3000}
+        onClose={() => setToast({ ...toast, open: false })}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+      >
+        <MuiAlert elevation={3} variant="filled" severity={toast.severity} sx={{ width: "100%" }}>
+          {toast.message}
+        </MuiAlert>
+      </Snackbar>
     </Box>
   );
 }
