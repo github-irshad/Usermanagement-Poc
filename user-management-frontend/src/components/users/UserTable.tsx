@@ -11,6 +11,8 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
 import { format, parseISO } from "date-fns";
+import ApartmentOutlinedIcon from "@mui/icons-material/ApartmentOutlined";
+import WcOutlinedIcon from "@mui/icons-material/WcOutlined";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
@@ -71,8 +73,18 @@ export default function UserTable({ users, onEdit, onDelete, visibleCount, total
                 </Box>
               </TableCell>
               <TableCell><RoleChip role={u.role} /></TableCell>
-              <TableCell>{u.department}</TableCell>
-              <TableCell>{u.gender}</TableCell>
+              <TableCell>
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                  <ApartmentOutlinedIcon color="primary" fontSize="small" />
+                  <Typography variant="body2">{u.department}</Typography>
+                </Box>
+              </TableCell>
+              <TableCell>
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                  <WcOutlinedIcon color="primary" fontSize="small" />
+                  <Typography variant="body2">{u.gender}</Typography>
+                </Box>
+              </TableCell>
               <TableCell>
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                   <CalendarMonthOutlinedIcon color="primary" fontSize="small" />
