@@ -10,3 +10,7 @@
 /backend/UserManagement.Service/obj
 /backend/UserManagement.Tests/bin
 /backend/UserManagement.Tests/obj
+/backend/UserManagement.Api/bin/Debug/net8.0
+/backend/UserManagement.Core/bin/Debug/net8.0
+/backend/UserManagement.Repository/bin/Debug/net8.0
+/backend/UserManagement.Service/bin/Debug/net8.0

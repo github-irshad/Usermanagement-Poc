@@ -1,35 +1,16 @@
 ﻿using UserManagement.Core.Entities;
+using UserManagement.Core.Enums;
 
 
 namespace UserManagement.Core.DTOs;
 
 
-public sealed record UserResponse(
-Guid Id,
-string Name,
-string Email,
-Gender Gender,
-DateOnly DateOfBirth,
-string Phone,
-Department Department
-);
-
-
-public sealed record CreateUserRequest(
-string Name,
-string Email,
-Gender Gender,
-DateOnly DateOfBirth,
-string Phone,
-Department Department
-);
-
-
-public sealed record UpdateUserRequest(
-string Name,
-string Email,
-Gender Gender,
-DateOnly DateOfBirth,
-string Phone,
-Department Department
-);
+public class UserDto
+{
+    public string Name { get; set; } = string.Empty;
+    public string Email { get; set; } = string.Empty;
+    public Gender Gender { get; set; }
+    public DateTime DateOfBirth { get; set; }
+    public string Phone { get; set; } = string.Empty;
+    public Department Department { get; set; }
+}
