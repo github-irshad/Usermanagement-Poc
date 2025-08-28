@@ -6,7 +6,7 @@ import {
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import type { User, Gender, Department } from "../../types/user";
+import type { User, Gender, Department, Role } from "../../types/user";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -19,6 +19,7 @@ interface FormValues {
   dob: Date | null;
   phone: string;
   department: Department;
+  role: Role;
 }
 
 const schema = yup.object({
@@ -28,6 +29,7 @@ const schema = yup.object({
   dob: yup.date().nullable().required("Date of birth is required").max(new Date(), "DOB must be in past"),
   phone: yup.string().required("Phone is required").min(7, "Too short"),
   department: yup.string().required("Department is required"),
+  role: yup.mixed().oneOf(["Admin","Editor","Viewer"]).required(),
 });
 
 interface Props {
@@ -38,6 +40,7 @@ interface Props {
 }
 
 const departments: Department[] = ["HR","IT","Sales","Marketing","Finance"];
+const roles: Role[] = ["Admin","Editor","Viewer"];
 
 export default function UserFormDrawer({ open, initial, onClose, onSave }: Props) {
   const { control, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm<FormValues>({
@@ -49,6 +52,7 @@ export default function UserFormDrawer({ open, initial, onClose, onSave }: Props
       dob: null,
       phone: "",
       department: "HR",
+      role: "Viewer",
     },
   });
 
@@ -61,6 +65,7 @@ export default function UserFormDrawer({ open, initial, onClose, onSave }: Props
         dob: initial.dob ? new Date(initial.dob) : null,
         phone: initial.phone,
         department: initial.department,
+        role: initial.role,
       });
     } else {
       reset({
@@ -70,6 +75,7 @@ export default function UserFormDrawer({ open, initial, onClose, onSave }: Props
         dob: null,
         phone: "",
         department: "HR",
+        role: "Viewer",
       });
     }
   }, [initial, reset]);
@@ -83,6 +89,7 @@ export default function UserFormDrawer({ open, initial, onClose, onSave }: Props
       dob: data.dob ? format(data.dob, "yyyy-MM-dd") : "",
       phone: data.phone.trim(),
       department: data.department,
+      role: data.role,
     };
     await onSave(payload);
   };
@@ -133,6 +140,12 @@ export default function UserFormDrawer({ open, initial, onClose, onSave }: Props
             <Controller name="department" control={control} render={({ field }) => (
               <TextField select label="Department" {...field} error={!!errors.department} helperText={errors.department?.message}>
                 {departments.map((d) => <MenuItem key={d} value={d}>{d}</MenuItem>)}
+              </TextField>
+            )} />
+
+            <Controller name="role" control={control} render={({ field }) => (
+              <TextField select label="Role" {...field} error={!!errors.role} helperText={errors.role?.message}>
+                {roles.map((r) => <MenuItem key={r} value={r}>{r}</MenuItem>)}
               </TextField>
             )} />
 

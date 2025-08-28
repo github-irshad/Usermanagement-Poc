@@ -14,4 +14,5 @@ public class User
     public DateTime DateOfBirth { get; set; }
     public string Phone { get; set; } = string.Empty;
     public Department Department { get; set; }
+    public Role Role { get; set; }
 }

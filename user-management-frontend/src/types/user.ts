@@ -1,6 +1,7 @@
 // src/types/user.ts
 export type Gender = "Male" | "Female";
 export type Department = "HR" | "IT" | "Sales" | "Marketing" | "Finance";
+export type Role = "Admin" | "Editor" | "Viewer";
 
 export interface User {
   id: string;            // GUID-like string
@@ -10,4 +11,5 @@ export interface User {
   dob: string;           // ISO date string YYYY-MM-DD
   phone: string;
   department: Department;
+  role: Role;
 }

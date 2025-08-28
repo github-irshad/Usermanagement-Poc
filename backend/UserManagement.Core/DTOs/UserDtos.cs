@@ -16,4 +16,5 @@ public class UserDto
     [RegularExpression(@"^\+?[1-9]\d{1,14}$", ErrorMessage = "Enter a valid phone number")]
     public string Phone { get; set; } = string.Empty;
     public Department Department { get; set; }
+    public Role Role { get; set; }
 }

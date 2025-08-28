@@ -25,6 +25,7 @@ export default function UserTable({ users, onEdit, onDelete }: Props) {
           <TableRow>
             <TableCell>Name</TableCell>
             <TableCell>Email</TableCell>
+            <TableCell>Role</TableCell>
             <TableCell>Gender</TableCell>
             <TableCell>DOB</TableCell>
             <TableCell>Phone</TableCell>
@@ -37,6 +38,7 @@ export default function UserTable({ users, onEdit, onDelete }: Props) {
             <TableRow key={u.id}>
               <TableCell>{u.name}</TableCell>
               <TableCell>{u.email}</TableCell>
+              <TableCell>{u.role}</TableCell>
               <TableCell>{u.gender}</TableCell>
               <TableCell>{u.dob}</TableCell>
               <TableCell>{u.phone}</TableCell>

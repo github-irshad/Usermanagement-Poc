@@ -4,7 +4,8 @@ import axiosClient from "./axiosClient";
 
 // Backend entity and DTO shapes
 type BackendGender = "Male" | "Female";
-type BackendDepartment = "Engineering" | "Sales" | "HR" | "Finance" | "Marketing" | "Operations";
+type BackendDepartment = "HR" | "IT" | "Sales" | "Marketing" | "Finance";
+type BackendRole = "Admin" | "Editor" | "Viewer";
 
 interface BackendUser {
   id: string;
@@ -14,6 +15,7 @@ interface BackendUser {
   dateOfBirth: string; // ISO
   phone: string;
   department: BackendDepartment;
+  role: BackendRole;
 }
 
 interface UserDto {
@@ -23,6 +25,7 @@ interface UserDto {
   dateOfBirth: string; // ISO
   phone: string;
   department: BackendDepartment;
+  role: BackendRole;
 }
 
 const mapFromBackend = (u: BackendUser): User => ({
@@ -33,6 +36,7 @@ const mapFromBackend = (u: BackendUser): User => ({
   dob: u.dateOfBirth.substring(0, 10),
   phone: u.phone,
   department: u.department,
+  role: u.role,
 });
 
 const toDto = (payload: Omit<User, "id">): UserDto => ({
@@ -42,6 +46,7 @@ const toDto = (payload: Omit<User, "id">): UserDto => ({
   dateOfBirth: payload.dob,
   phone: payload.phone,
   department: payload.department,
+  role: payload.role,
 });
 
 export const userApi = {

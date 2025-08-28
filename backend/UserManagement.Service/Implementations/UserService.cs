@@ -32,7 +32,8 @@ namespace UserManagement.Service.Implementations
                 Gender = dto.Gender,
                 DateOfBirth = dto.DateOfBirth,
                 Phone = dto.Phone,
-                Department = dto.Department
+                Department = dto.Department,
+                Role = dto.Role
             };
 
             _repository.Add(user);
@@ -49,6 +50,7 @@ namespace UserManagement.Service.Implementations
             user.DateOfBirth = dto.DateOfBirth;
             user.Phone = dto.Phone;
             user.Department = dto.Department;
+            user.Role = dto.Role;
 
             _repository.Update(user);
             return user;
