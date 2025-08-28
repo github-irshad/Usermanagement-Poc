@@ -9,7 +9,7 @@ export default function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <TopBar />
-      <Container maxWidth="lg" sx={{ mt: 4 }}>
+      <Container maxWidth="lg" sx={{ mt: 10 }}>
         <UsersPage />
       </Container>
     </ThemeProvider>

@@ -6,7 +6,7 @@ import PeopleOutlineIcon from "@mui/icons-material/PeopleOutline";
 
 export default function TopBar() {
   return (
-    <AppBar position="static" color="default" elevation={0} sx={{ borderBottom: 1, borderColor: "divider" }}>
+    <AppBar position="fixed" color="default" elevation={0} sx={{ borderBottom: 1, borderColor: "divider" }}>
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
           <PeopleOutlineIcon color="primary" />
