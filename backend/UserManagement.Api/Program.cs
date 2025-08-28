@@ -12,6 +12,18 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
     });
 
+// CORS policy (allow any origin)
+const string FrontendCorsPolicy = "FrontendCors";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: FrontendCorsPolicy, policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 // Register DI
 // Use singleton for in-memory repository so data persists across requests
 builder.Services.AddSingleton<IUserRepository, UserRepository>();
@@ -30,7 +42,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+// Only redirect to HTTPS outside of Development to avoid local 307s
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
+
+app.UseCors(FrontendCorsPolicy);
 
 app.UseAuthorization();
 

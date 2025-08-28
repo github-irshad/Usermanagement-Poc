@@ -1,102 +1,71 @@
 // src/api/userApi.ts
 import type { User } from "../types/user";
-import { v4 as uuidv4 } from "uuid";
+import axiosClient from "./axiosClient";
 
-/**
- * In-memory store + localStorage persistence for convenience.
- * Methods mirror typical axios responses: return Promise resolving the data.
- */
+// Backend entity and DTO shapes
+type BackendGender = "Male" | "Female";
+type BackendDepartment = "Engineering" | "Sales" | "HR" | "Finance" | "Marketing" | "Operations";
 
-const STORAGE_KEY = "um_users_v1";
+interface BackendUser {
+  id: string;
+  name: string;
+  email: string;
+  gender: BackendGender;
+  dateOfBirth: string; // ISO
+  phone: string;
+  department: BackendDepartment;
+}
 
-const seed = (): User[] => [
-  {
-    id: uuidv4(),
-    name: "Akhil N",
-    email: "akhil@example.com",
-    gender: "Male",
-    dob: "1996-05-12",
-    phone: "+91 90000 11111",
-    department: "Engineering",
-  },
-  {
-    id: uuidv4(),
-    name: "Neha S",
-    email: "neha@example.com",
-    gender: "Female",
-    dob: "1994-02-02",
-    phone: "+91 90000 22222",
-    department: "Marketing",
-  },
-];
+interface UserDto {
+  name: string;
+  email: string;
+  gender: BackendGender;
+  dateOfBirth: string; // ISO
+  phone: string;
+  department: BackendDepartment;
+}
 
-const load = (): User[] => {
-  const raw = localStorage.getItem(STORAGE_KEY);
-  if (!raw) {
-    const s = seed();
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(s));
-    return s;
-  }
-  try {
-    return JSON.parse(raw) as User[];
-  } catch {
-    localStorage.removeItem(STORAGE_KEY);
-    const s = seed();
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(s));
-    return s;
-  }
-};
+const mapFromBackend = (u: BackendUser): User => ({
+  id: u.id,
+  name: u.name,
+  email: u.email,
+  gender: u.gender,
+  dob: u.dateOfBirth.substring(0, 10),
+  phone: u.phone,
+  department: u.department,
+});
 
-let store = load();
-
-const persist = () => localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
+const toDto = (payload: Omit<User, "id">): UserDto => ({
+  name: payload.name,
+  email: payload.email,
+  gender: payload.gender,
+  dateOfBirth: payload.dob,
+  phone: payload.phone,
+  department: payload.department,
+});
 
 export const userApi = {
   getAll: async (): Promise<User[]> => {
-    await new Promise((r) => setTimeout(r, 150)); // simulate latency
-    // sorted by name
-    return [...store].sort((a, b) => a.name.localeCompare(b.name));
+    const { data } = await axiosClient.get<BackendUser[]>("/api/Users");
+    return data.map(mapFromBackend).sort((a, b) => a.name.localeCompare(b.name));
   },
 
   getById: async (id: string): Promise<User | null> => {
-    await new Promise((r) => setTimeout(r, 100));
-    return store.find((u) => u.id === id) ?? null;
+    const { data } = await axiosClient.get<BackendUser>(`/api/Users/${id}`);
+    return data ? mapFromBackend(data) : null;
   },
 
   create: async (payload: Omit<User, "id">): Promise<User> => {
-    await new Promise((r) => setTimeout(r, 200));
-    // simple unique email check
-    if (store.some((u) => u.email.toLowerCase() === payload.email.toLowerCase())) {
-      const err = new Error("Email already in use");
-      // attach code like axios would
-      (err as any).status = 409;
-      throw err;
-    }
-    const created: User = { id: uuidv4(), ...payload };
-    store.push(created);
-    persist();
-    return created;
+    const { data } = await axiosClient.post<BackendUser>("/api/Users", toDto(payload));
+    return mapFromBackend(data);
   },
 
   update: async (id: string, payload: Omit<User, "id">): Promise<User> => {
-    await new Promise((r) => setTimeout(r, 200));
-    const idx = store.findIndex((u) => u.id === id);
-    if (idx === -1) throw new Error("Not found");
-    // email uniqueness except current
-    if (store.some((u) => u.email.toLowerCase() === payload.email.toLowerCase() && u.id !== id)) {
-      const err = new Error("Email already in use");
-      (err as any).status = 409;
-      throw err;
-    }
-    const updated: User = { id, ...payload };
-    store[idx] = updated;
-    persist();
-    return updated;
+    const { data } = await axiosClient.put<BackendUser>(`/api/Users/${id}`, toDto(payload));
+    return mapFromBackend(data);
   },
 
   delete: async (id: string): Promise<void> => {
-    await new Promise((r) => setTimeout(r, 150));
-    store = store.filter((u) => u.id !== id);
-    persist();
+    await axiosClient.delete(`/api/Users/${id}`);
   },
 };
