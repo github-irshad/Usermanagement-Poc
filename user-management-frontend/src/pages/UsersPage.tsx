@@ -1,6 +1,7 @@
 // src/pages/UsersPage.tsx
 import React, { useState } from "react";
-import { Box, Button, Typography, CircularProgress } from "@mui/material";
+import { Box, Button, Typography, CircularProgress, TextField, InputAdornment } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
 import UserTable from "../components/users/UserTable";
 import UserFormDrawer from "../components/users/UserFormDrawer";
 import ConfirmDialog from "../components/common/ConfirmDialog";
@@ -13,6 +14,7 @@ export default function UsersPage() {
   const [editing, setEditing] = useState<User | null>(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [toDelete, setToDelete] = useState<User | null>(null);
+  const [query, setQuery] = useState("");
 
   const onAddClick = () => { setEditing(null); setOpenForm(true); };
 
@@ -41,12 +43,33 @@ export default function UsersPage() {
   return (
     <Box p={3}>
       <Typography variant="h5">User Management</Typography>
-      <Box mt={2}>
+      <Box mt={2} sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+        <TextField
+          size="small"
+          placeholder="Search users..."
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          InputProps={{ startAdornment: (
+            <InputAdornment position="start"><SearchIcon fontSize="small" /></InputAdornment>
+          )}}
+          sx={{ maxWidth: 360 }}
+        />
         <Button variant="contained" onClick={onAddClick}>Add New User</Button>
       </Box>
 
       {loading ? <Box mt={3}><CircularProgress /></Box> : (
-        <UserTable users={users} onEdit={handleEdit} onDelete={handleDelete} />
+        <UserTable
+          users={users.filter((u) => {
+            const q = query.trim().toLowerCase();
+            if (!q) return true;
+            return [u.name, u.email, u.phone, u.department, u.gender, u.role]
+              .join(" ")
+              .toLowerCase()
+              .includes(q);
+          })}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+        />
       )}
 
       <UserFormDrawer
