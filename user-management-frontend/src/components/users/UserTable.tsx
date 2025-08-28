@@ -42,9 +42,7 @@ export default function UserTable({ users, onEdit, onDelete, visibleCount, total
     }
     return raw;
   };
-  if (!users || users.length === 0) {
-    return <Box p={3}><Typography>No users found</Typography></Box>;
-  }
+  const hasUsers = users && users.length > 0;
 
   return (
     <TableContainer component={Paper} sx={{ mt: 2 }}>
@@ -61,7 +59,7 @@ export default function UserTable({ users, onEdit, onDelete, visibleCount, total
           </TableRow>
         </TableHead>
         <TableBody>
-          {users.map((u) => (
+          {hasUsers ? users.map((u) => (
             <TableRow key={u.id}>
               <TableCell>
                 <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
@@ -90,7 +88,15 @@ export default function UserTable({ users, onEdit, onDelete, visibleCount, total
                 </IconButton>
               </TableCell>
             </TableRow>
-          ))}
+          )) : (
+            <TableRow>
+              <TableCell colSpan={7}>
+                <Box sx={{ py: 6, textAlign: "center", color: "text.secondary" }}>
+                  No users found.
+                </Box>
+              </TableCell>
+            </TableRow>
+          )}
         </TableBody>
       </Table>
       <Menu anchorEl={menuAnchor} open={Boolean(menuAnchor)} onClose={closeMenu} anchorOrigin={{ vertical: "bottom", horizontal: "right" }} transformOrigin={{ vertical: "top", horizontal: "right" }}>
