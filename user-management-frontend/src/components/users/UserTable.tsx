@@ -2,13 +2,15 @@
 import React from "react";
 import type { User } from "../../types/user";
 import {
-  Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Typography, Box, Menu, MenuItem, ListItemIcon, ListItemText
+  Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Typography, Box, Menu, MenuItem, ListItemIcon, ListItemText, Avatar
 } from "@mui/material";
 import RoleChip from "../common/RoleChip";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
+import { format, parseISO } from "date-fns";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
@@ -29,6 +31,17 @@ export default function UserTable({ users, onEdit, onDelete, visibleCount, total
     setMenuForId(id);
   };
   const closeMenu = () => { setMenuAnchor(null); setMenuForId(null); };
+  
+  const formatPhone = (raw: string): string => {
+    const digits = (raw || "").replace(/\D/g, "");
+    if (digits.length === 10) {
+      const a = digits.slice(0, 3);
+      const b = digits.slice(3, 6);
+      const c = digits.slice(6);
+      return `(${a}) ${b}-${c}`;
+    }
+    return raw;
+  };
   if (!users || users.length === 0) {
     return <Box p={3}><Typography>No users found</Typography></Box>;
   }
@@ -51,19 +64,29 @@ export default function UserTable({ users, onEdit, onDelete, visibleCount, total
           {users.map((u) => (
             <TableRow key={u.id}>
               <TableCell>
-                <Box>
-                  <Typography sx={{ fontWeight: 600 }}>{u.name}</Typography>
-                  <Typography variant="body2" color="text.secondary">{u.email}</Typography>
+                <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                  <Avatar alt={u.name} src={`https://i.pravatar.cc/40?u=${encodeURIComponent(u.email)}`} />
+                  <Box>
+                    <Typography sx={{ fontWeight: 600 }}>{u.name}</Typography>
+                    <Typography variant="body2" color="text.secondary">{u.email}</Typography>
+                  </Box>
                 </Box>
               </TableCell>
               <TableCell><RoleChip role={u.role} /></TableCell>
               <TableCell>{u.department}</TableCell>
               <TableCell>{u.gender}</TableCell>
-              <TableCell>{u.dob}</TableCell>
-              <TableCell>{u.phone}</TableCell>
+              <TableCell>
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                  <CalendarMonthOutlinedIcon color="primary" fontSize="small" />
+                  <Typography variant="body2">{format(parseISO(u.dob), "do MMM, yyyy")}</Typography>
+                </Box>
+              </TableCell>
+              <TableCell>
+                <Typography sx={{ fontWeight: 600 }}>{formatPhone(u.phone)}</Typography>
+              </TableCell>
               <TableCell align="right">
                 <IconButton size="small" onClick={(e) => openMenu(e, u.id)}>
-                  <MoreVertIcon />
+                  <MoreHorizIcon />
                 </IconButton>
               </TableCell>
             </TableRow>
