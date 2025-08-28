@@ -1,16 +1,39 @@
-﻿################################################################################
-# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
-################################################################################
+# Root ignore for backend and frontend
 
-/.vs
-/backend/.vs
-/backend/UserManagement.Api/obj
-/backend/UserManagement.Core/obj
-/backend/UserManagement.Repository/obj
-/backend/UserManagement.Service/obj
-/backend/UserManagement.Tests/bin
-/backend/UserManagement.Tests/obj
-/backend/UserManagement.Api/bin/Debug/net8.0
-/backend/UserManagement.Core/bin/Debug/net8.0
-/backend/UserManagement.Repository/bin/Debug/net8.0
-/backend/UserManagement.Service/bin/Debug/net8.0
+# Node/Frontend
+node_modules/
+dist/
+dist-ssr/
+*.log
+*.local
+coverage/
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Vite/Vitepress
+user-management-frontend/public/vite.svg
+
+# Env files
+.env
+.env.*
+
+# .NET build artifacts
+**/bin/
+**/obj/
+*.user
+*.lock.json
+
+# Visual Studio
+**/.vs/
+
+# Ignore the nested frontend .gitignore so only root rules apply
+/user-management-frontend/.gitignore
