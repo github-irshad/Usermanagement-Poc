@@ -6,10 +6,15 @@ using UserManagement.Service.Implementations;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+    });
 
 // Register DI
-builder.Services.AddScoped<IUserRepository, UserRepository>();
+// Use singleton for in-memory repository so data persists across requests
+builder.Services.AddSingleton<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 
 // Swagger (optional, but useful in dev)
