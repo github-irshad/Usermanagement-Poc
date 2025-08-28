@@ -1,8 +1,9 @@
 // src/components/users/UserFormDrawer.tsx
 import React, { useEffect } from "react";
 import {
-  Drawer, Box, Button, TextField, RadioGroup, FormControlLabel, Radio, FormLabel, MenuItem, Stack
+  Drawer, Box, Button, TextField, RadioGroup, FormControlLabel, Radio, FormLabel, MenuItem, Stack, Typography, IconButton, Divider
 } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -95,27 +96,29 @@ export default function UserFormDrawer({ open, initial, onClose, onSave }: Props
   };
 
   return (
-    <Drawer anchor="right" open={open} onClose={onClose}>
-      <Box sx={{ width: 420, p: 3 }}>
-        <form onSubmit={handleSubmit(submit)}>
-          <Stack spacing={2}>
+    <Drawer anchor="right" open={open} onClose={onClose} PaperProps={{ sx: { width: 440 } }}>
+      <Box sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
+        <Box sx={{ p: 2.5, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <Box>
+            <Typography variant="h6" sx={{ fontWeight: 700 }}>{initial ? "Edit User" : "Add User"}</Typography>
+            <Typography variant="body2" color="text.secondary">{initial ? "Update the user's details below." : "Enter the details for the new user."}</Typography>
+          </Box>
+          <IconButton aria-label="close" onClick={onClose}>
+            <CloseIcon />
+          </IconButton>
+        </Box>
+        <Divider />
+        <Box component="form" onSubmit={handleSubmit(submit)} sx={{ p: 3, flex: 1, overflow: "auto" }}>
+          <Stack spacing={2.5}>
             <Controller name="name" control={control} render={({ field }) => (
-              <TextField label="Name" {...field} error={!!errors.name} helperText={errors.name?.message} />
+              <TextField margin="normal" label="Full Name" {...field} error={!!errors.name} helperText={errors.name?.message} />
             )} />
 
             <Controller name="email" control={control} render={({ field }) => (
-              <TextField label="Email" {...field} error={!!errors.email} helperText={errors.email?.message} />
+              <TextField margin="normal" label="Email Address" {...field} error={!!errors.email} helperText={errors.email?.message} />
             )} />
 
-            <div>
-              <FormLabel>Gender</FormLabel>
-              <Controller name="gender" control={control} render={({ field }) => (
-                <RadioGroup row {...field}>
-                  <FormControlLabel value="Male" control={<Radio />} label="Male" />
-                  <FormControlLabel value="Female" control={<Radio />} label="Female" />
-                </RadioGroup>
-              )} />
-            </div>
+            {/* Gender/Role moved to bottom as dropdowns */}
 
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <Controller name="dob" control={control} render={({ field }) => (
@@ -125,6 +128,7 @@ export default function UserFormDrawer({ open, initial, onClose, onSave }: Props
                   onChange={(v) => field.onChange(v)}
                   slotProps={{
                     textField: {
+                      margin: "normal",
                       error: !!errors.dob,
                       helperText: errors.dob?.message,
                     },
@@ -134,27 +138,38 @@ export default function UserFormDrawer({ open, initial, onClose, onSave }: Props
             </LocalizationProvider>
 
             <Controller name="phone" control={control} render={({ field }) => (
-              <TextField label="Phone" {...field} error={!!errors.phone} helperText={errors.phone?.message} />
+              <TextField margin="normal" label="Phone Number" {...field} error={!!errors.phone} helperText={errors.phone?.message} />
             )} />
 
             <Controller name="department" control={control} render={({ field }) => (
-              <TextField select label="Department" {...field} error={!!errors.department} helperText={errors.department?.message}>
+              <TextField margin="normal" select label="Department" {...field} error={!!errors.department} helperText={errors.department?.message}>
                 {departments.map((d) => <MenuItem key={d} value={d}>{d}</MenuItem>)}
               </TextField>
             )} />
 
-            <Controller name="role" control={control} render={({ field }) => (
-              <TextField select label="Role" {...field} error={!!errors.role} helperText={errors.role?.message}>
-                {roles.map((r) => <MenuItem key={r} value={r}>{r}</MenuItem>)}
-              </TextField>
-            )} />
+            <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 2 }}>
+              <Box>
+                <Controller name="gender" control={control} render={({ field }) => (
+                <TextField margin="normal" select label="Gender" {...field} error={!!errors.gender} helperText={errors.gender?.toString() as any}>
+                  {["Male","Female"].map((g) => <MenuItem key={g} value={g}>{g}</MenuItem>)}
+                </TextField>
+                )} />
+              </Box>
+              <Box>
+                <Controller name="role" control={control} render={({ field }) => (
+                <TextField margin="normal" select label="Role" {...field} error={!!errors.role} helperText={errors.role?.message}>
+                  {roles.map((r) => <MenuItem key={r} value={r}>{r}</MenuItem>)}
+                </TextField>
+                )} />
+              </Box>
+            </Box>
 
             <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 1, mt: 2 }}>
               <Button onClick={onClose} disabled={isSubmitting}>Cancel</Button>
               <Button type="submit" variant="contained" disabled={isSubmitting}>Save</Button>
             </Box>
           </Stack>
-        </form>
+        </Box>
       </Box>
     </Drawer>
   );
