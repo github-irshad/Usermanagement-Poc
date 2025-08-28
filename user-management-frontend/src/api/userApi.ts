@@ -1,5 +1,5 @@
 // src/api/userApi.ts
-import { User } from "../types/user";
+import type { User } from "../types/user";
 import { v4 as uuidv4 } from "uuid";
 
 /**

@@ -1,6 +1,6 @@
 // src/components/users/UserTable.tsx
 import React from "react";
-import { User } from "../../types/user";
+import type { User } from "../../types/user";
 import {
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Typography, Box
 } from "@mui/material";

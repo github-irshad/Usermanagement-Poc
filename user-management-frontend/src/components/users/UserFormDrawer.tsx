@@ -6,11 +6,11 @@ import {
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { User, Gender, Department } from "../../types/user";
+import type { User, Gender, Department } from "../../types/user";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import format from "date-fns/format";
+import { format } from "date-fns/format";
 
 interface FormValues {
   name: string;
@@ -41,7 +41,7 @@ const departments: Department[] = ["Engineering","Sales","HR","Finance","Marketi
 
 export default function UserFormDrawer({ open, initial, onClose, onSave }: Props) {
   const { control, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm<FormValues>({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(schema as yup.ObjectSchema<FormValues>),
     defaultValues: {
       name: "",
       email: "",
@@ -116,9 +116,12 @@ export default function UserFormDrawer({ open, initial, onClose, onSave }: Props
                   label="Date of Birth"
                   value={field.value}
                   onChange={(v) => field.onChange(v)}
-                  renderInput={(params) =>
-                    <TextField {...params} error={!!errors.dob} helperText={errors.dob?.message} />
-                  }
+                  slotProps={{
+                    textField: {
+                      error: !!errors.dob,
+                      helperText: errors.dob?.message,
+                    },
+                  }}
                 />
               )} />
             </LocalizationProvider>

@@ -1,6 +1,6 @@
 // src/hooks/useUsers.ts
 import { useEffect, useState } from "react";
-import { User } from "../types/user";
+import type { User } from "../types/user";
 import { userApi } from "../api/userApi";
 
 export function useUsers() {

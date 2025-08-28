@@ -5,7 +5,7 @@ import UserTable from "../components/users/UserTable";
 import UserFormDrawer from "../components/users/UserFormDrawer";
 import ConfirmDialog from "../components/common/ConfirmDialog";
 import { useUsers } from "../hooks/useUsers";
-import { User } from "../types/user";
+import type { User } from "../types/user";
 
 export default function UsersPage() {
   const { users, loading, add, update, remove } = useUsers();
