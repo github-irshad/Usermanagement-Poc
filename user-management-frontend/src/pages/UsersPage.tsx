@@ -1,6 +1,7 @@
 // src/pages/UsersPage.tsx
 import React, { useState } from "react";
 import { Box, Button, Typography, CircularProgress, TextField, InputAdornment, Snackbar } from "@mui/material";
+import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import MuiAlert from "@mui/material/Alert";
 import SearchIcon from "@mui/icons-material/Search";
 import UserTable from "../components/users/UserTable";
@@ -62,7 +63,7 @@ export default function UsersPage() {
           )}}
           sx={{ maxWidth: 360 }}
         />
-        <Button variant="contained" onClick={onAddClick}>Add New User</Button>
+        <Button variant="contained" onClick={onAddClick} startIcon={<AddRoundedIcon />}>Add New User</Button>
       </Box>
 
       {loading ? <Box mt={3}><CircularProgress /></Box> : (
