@@ -37,7 +37,7 @@ interface Props {
   onSave: (payload: Omit<User, "id">) => Promise<void>;
 }
 
-const departments: Department[] = ["Engineering","Sales","HR","Finance","Marketing","Operations"];
+const departments: Department[] = ["HR","IT","Sales","Marketing","Finance"];
 
 export default function UserFormDrawer({ open, initial, onClose, onSave }: Props) {
   const { control, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm<FormValues>({
@@ -48,7 +48,7 @@ export default function UserFormDrawer({ open, initial, onClose, onSave }: Props
       gender: "Male",
       dob: null,
       phone: "",
-      department: "Engineering",
+      department: "HR",
     },
   });
 
@@ -69,7 +69,7 @@ export default function UserFormDrawer({ open, initial, onClose, onSave }: Props
         gender: "Male",
         dob: null,
         phone: "",
-        department: "Engineering",
+        department: "HR",
       });
     }
   }, [initial, reset]);

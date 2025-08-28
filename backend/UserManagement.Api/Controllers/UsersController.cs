@@ -30,14 +30,14 @@
             }
 
             [HttpPost]
-            public ActionResult<User> Add(UserDto dto)
+            public ActionResult<User> Add([FromBody] UserDto dto)
             {
                 var user = _service.Add(dto);
                 return CreatedAtAction(nameof(GetById), new { id = user.Id }, user);
             }
 
             [HttpPut("{id}")]
-            public ActionResult<User> Update(Guid id, UserDto dto)
+            public ActionResult<User> Update(Guid id, [FromBody] UserDto dto)
             {
                 try
                 {

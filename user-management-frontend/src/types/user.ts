@@ -1,6 +1,6 @@
 // src/types/user.ts
 export type Gender = "Male" | "Female";
-export type Department = "Engineering" | "Sales" | "HR" | "Finance" | "Marketing" | "Operations";
+export type Department = "HR" | "IT" | "Sales" | "Marketing" | "Finance";
 
 export interface User {
   id: string;            // GUID-like string
